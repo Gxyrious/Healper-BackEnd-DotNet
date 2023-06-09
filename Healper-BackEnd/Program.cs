@@ -1,4 +1,4 @@
-using Healper_BackEnd.Models;
+using HealperModels;
 
 var builder = WebApplication.CreateBuilder(args);
 

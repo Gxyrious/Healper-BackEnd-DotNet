@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using HealperModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Healper_BackEnd.Models
+namespace HealperModels
 {
     public partial class ModelContext : DbContext
     {
@@ -22,7 +23,6 @@ namespace Healper_BackEnd.Models
         public virtual DbSet<Consultant> Consultants { get; set; } = null!;
         public virtual DbSet<PsychologyScale> PsychologyScales { get; set; } = null!;
         public virtual DbSet<ScaleRecord> ScaleRecords { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -229,25 +229,6 @@ namespace Healper_BackEnd.Models
                     .HasForeignKey(d => d.ScaleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("scale_record_psychology_scale_id_fk");
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("users");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(32)
-                    .HasColumnName("password");
-
-                entity.Property(e => e.Time)
-                    .HasColumnType("datetime")
-                    .HasColumnName("time");
-
-                entity.Property(e => e.Username)
-                    .HasMaxLength(32)
-                    .HasColumnName("username");
             });
 
             OnModelCreatingPartial(modelBuilder);

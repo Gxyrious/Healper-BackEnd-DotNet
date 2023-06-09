@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Healper_BackEnd.Models
+namespace HealperModels.Models
 {
     public partial class ScaleRecord
     {
