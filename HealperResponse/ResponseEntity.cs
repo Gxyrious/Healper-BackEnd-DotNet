@@ -2,19 +2,21 @@
 
 namespace HealperResponse
 {
-    public class ResponseEntity : HttpResponseMessage
+    public class ResponseEntity
     {
-        public static ResponseEntity OK()
+        public static ResponseEntity OK(string msg="")
         {
-            return new ResponseEntity(HttpStatusCode.OK);
+            return new ResponseEntity(HttpStatusCode.OK, msg);
         }
-        public static ResponseEntity ERR()
+
+        public static ResponseEntity ERR(string msg = "")
         {
-            return new ResponseEntity(HttpStatusCode.InternalServerError);
+            return new ResponseEntity(HttpStatusCode.InternalServerError, msg);
         }
-        private ResponseEntity(HttpStatusCode statusCode)
+        private ResponseEntity(HttpStatusCode statusCode, string msg)
         {
-            StatusCode = statusCode;
+            Code = statusCode;
+            Msg = msg;
         }
 
         public ResponseEntity Body(object data)
@@ -22,6 +24,10 @@ namespace HealperResponse
             Data = data;
             return this;
         }
-        public object? Data { get; set; }
+        public object? Data { get; set; } = null;
+
+        public HttpStatusCode Code { get; set; }
+
+        public string Msg { get; set; } = "";
     }
 }

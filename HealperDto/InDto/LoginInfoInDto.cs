@@ -4,6 +4,6 @@
     {
         public String userPhone { get; set; }
 
-        public String password { get; set; }
+        public String userPassword { get; set; }
     }
 }

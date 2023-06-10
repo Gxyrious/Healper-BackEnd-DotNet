@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using HealperDto.InDto;
 using HealperService;
 using HealperDto.OutDto;
+using ExternalInterfaces;
 
 namespace Healper_BackEnd.Controllers
 {
@@ -45,31 +46,32 @@ namespace Healper_BackEnd.Controllers
         }
 
 
-        [HttpPost(Name = "login")]
+        [HttpPost("login")]
         public ResponseEntity Login(LoginInfoInDto inDto)
         {
             IUser user = myUserService.findUserByPhone(inDto.userPhone);
             if (user == null)
             {
-                return ResponseEntity.ERR().Body("User Not Exist");
+                HttpContext.Response.StatusCode = 500;
+                return ResponseEntity.ERR("User Not Exist");
             }
             else
             {
-                if (user.GetPassword().Equals(GetEncrytionPassword(inDto.password)))
+                if (user.GetPassword().Equals(GetEncrytionPassword(inDto.userPassword)))
                 {
                     if (user.GetType() == typeof(Client))
                     {
-                        return ResponseEntity.OK().Body(new LoginClientInfoOutDto
+                        return ResponseEntity.OK("Client Login Success").Body(new LoginClientInfoOutDto
                         {
                             user = (Client)user,
-                            userType = UserType.Client,
+                            userType = "client",
                         });
                     } else
                     {
-                        return ResponseEntity.OK().Body(new LoginConsultantInfoOutDto
+                        return ResponseEntity.OK("Consultant Login Success").Body(new LoginConsultantInfoOutDto
                         {
                             user = (Consultant)user,
-                            userType = UserType.Consultant,
+                            userType = "consultant",
                         });
                     }
                 }
@@ -78,6 +80,22 @@ namespace Healper_BackEnd.Controllers
                     return ResponseEntity.ERR().Body("Password Error");
                 }
             }
+        }
+
+        [HttpPost("uploadProfile")]
+        public ResponseEntity UploadImage(UploadImageInDto inDto)
+        {
+            string imageBase64 = inDto.base64;
+            
+            Stream inputStream = OssHelp.Base64ToStream(imageBase64);
+
+            string imagePath = inDto.userType.ToString() 
+                + '-' + inDto.id + '.' + OssHelp.GetImageTypeFromBase64(imageBase64);
+
+            string url = OssHelp.UploadStream(inputStream, imagePath);
+
+            return ResponseEntity.OK().Body(url);
+            
         }
     }
 }

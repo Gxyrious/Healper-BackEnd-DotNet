@@ -7,33 +7,30 @@ namespace ExternalInterfaces
 {
     public class OssHelp
     {
-        public static IConfiguration _Configuration { get; set; }
+        private static IConfiguration Configuration { get; set; }
 
         static OssHelp()
         {
-            _Configuration = new ConfigurationBuilder().Add(new JsonConfigurationSource { Path = "appsettings.json", ReloadOnChange = true }).Build();
+            Configuration = new ConfigurationBuilder().Add(new JsonConfigurationSource { Path = "appsettings.json", ReloadOnChange = true }).Build();
         }
 
-        public const string bucketName = "houniaoliuxue";
-        public static OssClient createClient()
+        public static string GetImageTypeFromBase64(string imageBase64)
         {
-            string accessKeyId = _Configuration["AccessKey"];
-            string accessKeySecret = _Configuration["AccessPassword"];
-            const string endpoint = "http://oss-cn-shanghai.aliyuncs.com";
-            return new OssClient(endpoint, accessKeyId, accessKeySecret);
+            return imageBase64.Split('/', 3)[1].Split(';', 2)[0];
         }
-        public static string uploadImage(Stream text, string path)
+
+        public static MemoryStream Base64ToStream(string imageBase64)
         {
-            string accessKeyId = _Configuration["AccessKey"];
-            string accessKeySecret = _Configuration["AccessPassword"];
-            const string endpoint = "http://oss-cn-shanghai.aliyuncs.com";
-            const string bucketName = "houniaoliuxue";
-            var filebyte = StreamHelp.StreamToBytes(text);
-            var client = new OssClient(endpoint, accessKeyId, accessKeySecret);
-            MemoryStream stream = new MemoryStream(filebyte, 0, filebyte.Length);
-            client.PutObject(bucketName, path, stream);
-            string imgurl = "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/" + path;
-            return imgurl;
+            byte[] imageBytes = Convert.FromBase64String(imageBase64.Split("base64,")[1]);
+            MemoryStream stream = new MemoryStream(imageBytes, 0, imageBytes.Length);
+            return stream;
+        }
+
+        public static string UploadStream(Stream stream, string path)
+        {
+            OssClient client = new OssClient(Configuration["endPoint"], Configuration["accessKeyId"], Configuration["accessKeySecret"]);
+            client.PutObject(Configuration["bucketName"], path, stream);
+            return "https://" + Configuration["bucketName"] + '.' + Configuration["endPoint"] + '/' + path;
         }
     }
 }

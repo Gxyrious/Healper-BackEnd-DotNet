@@ -6,7 +6,7 @@ namespace HealperDto.OutDto
     {
         public Client user { get; set; }
 
-        public UserType userType { get; set; }
+        public String userType { get; set; }
 
         //public String tokenName { get; set; }
 
@@ -17,7 +17,7 @@ namespace HealperDto.OutDto
     {
         public Consultant user { get; set; }
 
-        public UserType userType { get; set; }
+        public String userType { get; set; }
 
         //public String tokenName { get; set; }
 
