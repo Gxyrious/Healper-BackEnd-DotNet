@@ -1,4 +1,6 @@
 using HealperModels;
+using HealperService;
+using HealperService.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddScoped<ModelContext>();
+builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddCors(cors => cors.AddPolicy("anys", p => p.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader()));
 
 var app = builder.Build();

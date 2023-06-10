@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Healper_BackEnd.Utils
+namespace HealperResponse
 {
     public class ResponseEntity : HttpResponseMessage
     {
@@ -12,7 +12,8 @@ namespace Healper_BackEnd.Utils
         {
             return new ResponseEntity(HttpStatusCode.InternalServerError);
         }
-        private ResponseEntity(HttpStatusCode statusCode) {
+        private ResponseEntity(HttpStatusCode statusCode)
+        {
             StatusCode = statusCode;
         }
 

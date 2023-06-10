@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HealperModels.Models
 {
-    public partial class Consultant
+    public partial class Consultant : IUser
     {
         public int Id { get; set; }
         public string Password { get; set; } = null!;
@@ -15,5 +15,20 @@ namespace HealperModels.Models
         public short? Expense { get; set; }
         public string? Label { get; set; }
         public string? Profile { get; set; }
+
+        public int GetId()
+        {
+            return Id;
+        }
+
+        public string GetPassword()
+        {
+            return Password;
+        }
+
+        public string GetUserphone()
+        {
+            return Userphone;
+        }
     }
 }
