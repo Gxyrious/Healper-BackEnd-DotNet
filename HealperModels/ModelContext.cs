@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using HealperModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace HealperModels
 {
     public partial class ModelContext : DbContext
     {
-        public ModelContext()
+        private readonly IConfiguration _Configuration;
+        public ModelContext(IConfiguration configuration)
         {
+            _Configuration = configuration;
         }
 
-        public ModelContext(DbContextOptions<ModelContext> options)
+        public ModelContext(DbContextOptions<ModelContext> options, IConfiguration configuration)
             : base(options)
         {
+            _Configuration = configuration;
         }
 
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
@@ -28,8 +32,7 @@ namespace HealperModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySQL("Data Source=81.68.102.171;Database=healper;Password=tjdxHealper2022;User ID=healper;");
+                optionsBuilder.UseMySQL($"Data Source={_Configuration["DataSource"]};Database={_Configuration["Database"]};Password={_Configuration["Password"]};User ID={_Configuration["UserID"]};");
             }
         }
 

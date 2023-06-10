@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExternalInterfaces\ExternalInterfaces.csproj" />
     <ProjectReference Include="..\HealperDto\HealperDto.csproj" />
     <ProjectReference Include="..\HealperModels\HealperModels.csproj" />
     <ProjectReference Include="..\HealperResponse\HealperResponse.csproj" />
