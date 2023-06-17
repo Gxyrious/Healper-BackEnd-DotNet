@@ -202,5 +202,22 @@ namespace HealperService.Impl
                 return false;
             }
         }
+
+        public int FindArchiveNumByClientId(int clientId)
+        {
+            return myContext.ConsultHistories.Count(c => c.ClientId == clientId && c.Status == "f");
+        }
+
+        public int GetOrderNumByClientId(int clientId)
+        {
+            return myContext.ConsultHistories.Count(c => c.ClientId == clientId);
+        }
+
+        public void DeleteOldWaitingOrdersByIds(List<int> ids)
+        {
+            var removedHistories = myContext.ConsultHistories.Where(c => ids.Contains(c.Id)).ToList();
+            myContext.ConsultHistories.RemoveRange(removedHistories);
+            myContext.SaveChanges();
+        }
     }
 }

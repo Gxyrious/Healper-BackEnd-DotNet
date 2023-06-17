@@ -120,5 +120,65 @@ namespace Healper_BackEnd.Controllers
                 return ResponseEntity.ERR("Data 'status' isn't one of {'w', 'p', 'f', 's', 'c'}");
             }
         }
+
+        [HttpGet("archive/sum")]
+        public ResponseEntity GetArchiveNumByClientId(int clientId)
+        {
+            try
+            {
+                int num = myHistoryService.FindArchiveNumByClientId(clientId);
+                return ResponseEntity.OK().Body(num);
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
+
+        [HttpGet("order/sum")]
+        public ResponseEntity GetOrderNumByClientId(int clientId)
+        {
+            try
+            {
+                int num = myHistoryService.GetOrderNumByClientId(clientId);
+                return ResponseEntity.OK().Body(num);
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
+
+        [HttpGet("order/waiting")]
+        public ResponseEntity GetWaitingConsultOrder(int clientId)
+        {
+            try
+            {
+                List<ConsultOrder> waitingOrders = myHistoryService.FindWaitingOrdersByClientId(clientId);
+                if (waitingOrders.Count == 0)
+                {
+                    return ResponseEntity.OK("No Waiting");
+                } else
+                {
+                    if (waitingOrders.Count > 1)
+                    {
+                        List<int> ids = new();
+                        for (int i = 1; i < waitingOrders.Count; i++)
+                        {
+                            ids.Add(waitingOrders[i].id!.Value);
+                        }
+                        myHistoryService.DeleteOldWaitingOrdersByIds(ids);
+                    }
+                    ConsultOrder order = waitingOrders.First();
+                    ConsultantInfo consultantInfo = myUserService.FindConsultantInfoById(order.consultantId!.Value)!.Value;
+                    order.consultantLabel = consultantInfo.label;
+                    order.consultantAge = consultantInfo.age;
+                    order.consultantProfile = consultantInfo.profile;
+                    order.consultantSex = consultantInfo.sex;
+                    return ResponseEntity.OK().Body(order);
+                }
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
     }
 }

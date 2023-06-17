@@ -23,5 +23,11 @@ namespace HealperService
         string? FindQrCodeByHistoryId(int historyId);
 
         bool UpdateHistoryStatusById(int historyId, string status);
+
+        int FindArchiveNumByClientId(int clientId);
+
+        int GetOrderNumByClientId(int clientId);
+
+        void DeleteOldWaitingOrdersByIds(List<int> ids);
     }
 }
