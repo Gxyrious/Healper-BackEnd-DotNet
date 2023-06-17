@@ -28,9 +28,9 @@ namespace ExternalInterfaces
 
         public static string UploadStream(Stream stream, string path)
         {
-            OssClient client = new OssClient(Configuration["endPoint"], Configuration["accessKeyId"], Configuration["accessKeySecret"]);
-            client.PutObject(Configuration["bucketName"], path, stream);
-            return "https://" + Configuration["bucketName"] + '.' + Configuration["endPoint"] + '/' + path;
+            OssClient client = new OssClient(Configuration["ossEndPoint"], Configuration["ossAccessKeyId"], Configuration["ossAccessKeySecret"]);
+            client.PutObject(Configuration["ossBucketName"], path, stream);
+            return "https://" + Configuration["ossBucketName"] + '.' + Configuration["ossEndPoint"] + '/' + path;
         }
     }
 }

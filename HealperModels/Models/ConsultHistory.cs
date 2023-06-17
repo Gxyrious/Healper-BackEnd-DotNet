@@ -9,7 +9,7 @@ namespace HealperModels.Models
         public int ClientId { get; set; }
         public int ConsultantId { get; set; }
         public long? EndTime { get; set; }
-        public double Expense { get; set; }
+        public int Expense { get; set; }
         public long? StartTime { get; set; }
         public string Status { get; set; } = null!;
         public string? Advice { get; set; }

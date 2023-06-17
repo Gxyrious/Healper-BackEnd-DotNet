@@ -5,10 +5,29 @@ namespace HealperService
 {
     public interface IUserService
     {
-        IUser findUserByPhone(string phone);
+        IUser? FindUserByPhone(string phone);
 
-        Client findClientByUserPhone(string phone);
+        Client? FindClientByUserPhone(string phone);
 
-        Consultant findConsultantByUserPhone(string phone);
+        Consultant? FindConsultantByUserPhone(string phone);
+
+        ClientInfo? FindClientInfoById(int id);
+
+        ConsultantInfo? FindConsultantInfoById(int id);
+
+        Client AddClientInfo(string nickname, string password, string userphone, string sex, int age);
+
+        void UpdateClientInfo(ClientInfo client);
+
+        void UpdateConsultantInfo(ConsultantInfo consultant);
+
+        bool CheckPasswdWithId(int id, string userType, string password);
+
+        void UpdateUserPasswd(int id, string userType, string password);
+
+        List<ConsultantInfo> FindConsultantsByLabel(string label, int page, int size);
+
+        List<ConsultantStatus> FindConsultantsWithClient(int clientId, string label, int page, int size);
+
     }
 }

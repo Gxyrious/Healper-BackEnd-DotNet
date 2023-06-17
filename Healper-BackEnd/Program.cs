@@ -13,6 +13,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddScoped<ModelContext>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
+builder.Services.AddScoped<IScaleService, ScaleServiceImpl>();
+builder.Services.AddScoped<IHistoryService, HistoryServiceImpl>();
+builder.Services.AddScoped<IConsultService, ConsultServiceImpl>();
+
 builder.Services.AddCors(cors => cors.AddPolicy("anys", p => p.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader()));
 
 var app = builder.Build();

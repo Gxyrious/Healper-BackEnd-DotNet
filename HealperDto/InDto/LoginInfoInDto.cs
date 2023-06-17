@@ -2,8 +2,8 @@
 {
     public struct LoginInfoInDto
     {
-        public String userPhone { get; set; }
+        public string userPhone { get; set; }
 
-        public String userPassword { get; set; }
+        public string userPassword { get; set; }
     }
 }
