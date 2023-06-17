@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using SmsCode;
 
 namespace ExternalInterfaces
 {
@@ -26,7 +27,7 @@ namespace ExternalInterfaces
         public static string SendMessage(string userphone)
         {
             var client = CreateClient();
-            string code = "520520";
+            string code = SmsCode.RandomCodeGenerator.generateCode().ToString();
             AlibabaCloud.SDK.Dysmsapi20170525.Models.SendSmsRequest request = new AlibabaCloud.SDK.Dysmsapi20170525.Models.SendSmsRequest
             {
                 PhoneNumbers = userphone,
