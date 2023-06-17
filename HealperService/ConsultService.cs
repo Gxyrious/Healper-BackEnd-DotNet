@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HealperDto.OutDto;
+using HealperModels.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +13,9 @@ namespace HealperService
         bool StartConsultation(int orderId, long startTime);
 
         bool EndConsultation(int orderId, long endTime);
+
+        List<ChatMessage> FindChatMessagesByClientIdAndConsultantId(int clientId, int consultantId, int page, int size);
+
+        ChatMessage FindMessageById(int messageId);
     }
 }

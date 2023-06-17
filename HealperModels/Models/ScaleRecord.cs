@@ -5,7 +5,7 @@ namespace HealperModels.Models
 {
     public partial class ScaleRecord
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         public int ClientId { get; set; }
         public long EndTime { get; set; }
         public sbyte IsHidden { get; set; }

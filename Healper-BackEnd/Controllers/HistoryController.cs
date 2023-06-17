@@ -1,4 +1,5 @@
-﻿using HealperDto.InDto;
+﻿using ExternalInterfaces;
+using HealperDto.InDto;
 using HealperDto.OutDto;
 using HealperModels.Models;
 using HealperResponse;
@@ -175,6 +176,61 @@ namespace Healper_BackEnd.Controllers
                     order.consultantSex = consultantInfo.sex;
                     return ResponseEntity.OK().Body(order);
                 }
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
+
+        [HttpGet("consultant")]
+        public ResponseEntity GetConsultantHistory(int consultantId, int page, int size)
+        {
+            try
+            {
+                List<ConsultOrder> orders = myHistoryService.FindConsultOrdersByConsultantId(consultantId, page, size);
+                return ResponseEntity.OK().Body(orders);
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
+
+        [HttpGet("consultant/sum")]
+        public ResponseEntity GetConsultantHistoryNum(int consultantId)
+        {
+            try
+            {
+                int num = myHistoryService.GetOrderNumByConsultantId(consultantId);
+                return ResponseEntity.OK().Body(num);
+            } catch (Exception err)
+            {
+                return ResponseEntity.ERR().Body(err);
+            }
+        }
+
+        [HttpPost("archive")]
+        public ResponseEntity WriteClientArchive(ArchiveInDto inDto)
+        {
+            try
+            {
+                int histroyId = inDto.id;
+                string aBase64 = inDto.adviceBase64;
+                string sBase64 = inDto.summaryBase64;
+
+                MemoryStream aStream = new(Convert.FromBase64String(aBase64));
+                MemoryStream sStream = new(Convert.FromBase64String(sBase64));
+
+                string advicePath = "advice-" + histroyId + ".html";
+                string summaryPath = "summary-" + histroyId + ".html";
+
+                string adviceURL = OssHelp.UploadStream(aStream, advicePath);
+                string summaryURL = OssHelp.UploadStream(sStream, summaryPath);
+
+                myHistoryService.WriteClientArchive(histroyId, advicePath, summaryPath);
+                Dictionary<string, string> urls = new Dictionary<string, string>();
+                urls.Add("adviceURL", adviceURL);
+                urls.Add("summaryURL", summaryURL);
+                return ResponseEntity.OK().Body(urls);
             } catch (Exception err)
             {
                 return ResponseEntity.ERR().Body(err);

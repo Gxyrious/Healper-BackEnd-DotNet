@@ -1,4 +1,6 @@
-﻿using HealperModels;
+﻿using HealperDto.OutDto;
+using HealperModels;
+using HealperModels.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,7 @@ namespace HealperService.Impl
             }
         }
 
+
         public bool StartConsultation(int orderId, long startTime)
         {
             try
@@ -43,6 +46,15 @@ namespace HealperService.Impl
             {
                 return false;
             }
+        }
+        public List<ChatMessage> FindChatMessagesByClientIdAndConsultantId(int clientId, int consultantId, int page, int size)
+        {
+            return myContext.ChatMessages.Where(w => w.ClientId == clientId && w.ConsultantId == consultantId).ToList();
+        }
+
+        public ChatMessage FindMessageById(int messageId)
+        {
+            return myContext.ChatMessages.Single(s => s.Id == messageId);
         }
     }
 }

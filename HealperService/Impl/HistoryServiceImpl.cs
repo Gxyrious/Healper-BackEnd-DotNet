@@ -1,6 +1,7 @@
 ﻿using HealperDto.OutDto;
 using HealperModels;
 using HealperModels.Models;
+using MySqlX.XDevAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -217,6 +218,70 @@ namespace HealperService.Impl
         {
             var removedHistories = myContext.ConsultHistories.Where(c => ids.Contains(c.Id)).ToList();
             myContext.ConsultHistories.RemoveRange(removedHistories);
+            myContext.SaveChanges();
+        }
+
+        public List<ConsultOrder> FindConsultOrdersByConsultantId(int consultantId, int page, int size)
+        {
+            List<ConsultOrder> orders = myContext.ConsultHistories
+                .Where(w => w.ConsultantId == consultantId)
+                .Join(myContext.Clients, ch => ch.ClientId, c => c.Id, (ch, c) => new ConsultOrder
+                {
+                    id = ch.Id,
+                    startTime = ch.StartTime,
+                    endTime = ch.EndTime,
+                    consultantId = ch.ConsultantId,
+                    clientId = ch.ClientId,
+                    realname = c.Nickname,
+                    expense = ch.Expense,
+                    status = ch.Status,
+                    clientSex = c.Sex,
+                    clientAge = c.Age
+                }).ToList();
+            orders.Sort((o1, o2) =>
+            {
+                if (statusPriotiry.ContainsKey(o1.status!) && statusPriotiry.ContainsKey(o2.status!))
+                {
+                    int re = statusPriotiry[o1.status!].CompareTo(statusPriotiry[o2.status!]);
+                    if (re == 0)
+                    {
+                        if (o1.startTime != null)
+                        {
+                            if (o2.startTime == null)
+                            {
+                                return 1;
+                            }
+                            else
+                            {
+                                return o1.startTime.Value.CompareTo(o2.startTime.Value);
+                            }
+                        }
+                    }
+                    return re;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            });
+            int endIndex = page * size;
+            if (endIndex > orders.Count)
+            {
+                endIndex = orders.Count;
+            }
+            return orders.GetRange(size * (page - 1), size);
+        }
+
+        public int GetOrderNumByConsultantId(int consultantId)
+        {
+            return myContext.ConsultHistories.Count(c => c.ConsultantId == consultantId);
+        }
+
+        public void WriteClientArchive(int historyId, string adviceURL, string summaryURL)
+        {
+            var history = myContext.ConsultHistories.Single(s => s.Id == historyId);
+            history.Advice = adviceURL;
+            history.Summary = summaryURL;
             myContext.SaveChanges();
         }
     }

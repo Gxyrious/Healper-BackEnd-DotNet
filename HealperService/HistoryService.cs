@@ -29,5 +29,11 @@ namespace HealperService
         int GetOrderNumByClientId(int clientId);
 
         void DeleteOldWaitingOrdersByIds(List<int> ids);
+
+        List<ConsultOrder> FindConsultOrdersByConsultantId(int consultantId, int page, int size);
+
+        int GetOrderNumByConsultantId(int consultantId);
+
+        void WriteClientArchive(int historyId, string adviceURL, string summaryURL);
     }
 }
