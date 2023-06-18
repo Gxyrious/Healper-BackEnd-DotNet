@@ -100,7 +100,7 @@ namespace HealperService.Impl
             {
                 endIndex = histories.Count;
             }
-            return histories.GetRange(size * (page - 1), size);
+            return histories.GetRange(size * (page - 1), endIndex);
         }
 
         public List<ConsultOrder> FindWaitingOrdersByClientId(int clientId)
@@ -171,7 +171,7 @@ namespace HealperService.Impl
             {
                 endIndex = orders.Count;
             }
-             return orders.GetRange(size * (page - 1), size);
+             return orders.GetRange(size * (page - 1), endIndex);
         }
 
         public string? FindQrCodeByHistoryId(int historyId)
@@ -269,7 +269,7 @@ namespace HealperService.Impl
             {
                 endIndex = orders.Count;
             }
-            return orders.GetRange(size * (page - 1), size);
+            return orders.GetRange(size * (page - 1), endIndex);
         }
 
         public int GetOrderNumByConsultantId(int consultantId)

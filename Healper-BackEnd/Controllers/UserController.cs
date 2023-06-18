@@ -29,7 +29,7 @@ namespace Healper_BackEnd.Controllers
             }
             catch (Exception)
             {
-                throw new Exception("Password Encryption Error");
+                return password;
             }
         }
 

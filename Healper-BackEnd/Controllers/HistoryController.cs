@@ -5,6 +5,7 @@ using HealperModels.Models;
 using HealperResponse;
 using HealperService;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace Healper_BackEnd.Controllers
 {
@@ -217,8 +218,8 @@ namespace Healper_BackEnd.Controllers
                 string aBase64 = inDto.adviceBase64;
                 string sBase64 = inDto.summaryBase64;
 
-                MemoryStream aStream = new(Convert.FromBase64String(aBase64));
-                MemoryStream sStream = new(Convert.FromBase64String(sBase64));
+                MemoryStream aStream = new(Encoding.UTF8.GetBytes(aBase64));
+                MemoryStream sStream = new(Encoding.UTF8.GetBytes(sBase64));
 
                 string advicePath = "advice-" + histroyId + ".html";
                 string summaryPath = "summary-" + histroyId + ".html";
