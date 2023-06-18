@@ -3,6 +3,8 @@ using HealperModels.Models;
 using HealperResponse;
 using HealperService;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
+using System.Text;
 
 namespace Healper_BackEnd.Controllers
 {
@@ -68,6 +70,43 @@ namespace Healper_BackEnd.Controllers
             {
                 return ResponseEntity.ERR();
             }
+        }
+
+        [HttpGet("ws")]
+        public async Task Get()
+        {
+            if (HttpContext.WebSockets.IsWebSocketRequest)
+            {
+                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                await HandleWebSocketConnection(webSocket);
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = 400;
+            }
+        }
+
+        private async Task HandleWebSocketConnection(WebSocket webSocket)
+        {
+            var buffer = new byte[1024 * 4];
+            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+            while (!result.CloseStatus.HasValue)
+            {
+                var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                await ProcessWebSocketMessage(message, webSocket);
+
+                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            }
+
+            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+        }
+
+        private async Task ProcessWebSocketMessage(string message, WebSocket webSocket)
+        {
+            var serverResponse = $"Server: Received message '{message}'.";
+            var serverResponseBytes = Encoding.UTF8.GetBytes(serverResponse);
+            await webSocket.SendAsync(new ArraySegment<byte>(serverResponseBytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
 }

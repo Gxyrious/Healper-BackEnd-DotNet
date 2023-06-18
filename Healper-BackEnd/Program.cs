@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddScoped<ModelContext>();
+builder.Services.AddDbContext<ModelContext>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IScaleService, ScaleServiceImpl>();
 builder.Services.AddScoped<IHistoryService, HistoryServiceImpl>();
@@ -29,6 +29,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseWebSockets();
 
 app.UseAuthorization();
 

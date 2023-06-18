@@ -156,7 +156,7 @@ namespace Healper_BackEnd.Controllers
                 List<ConsultOrder> waitingOrders = myHistoryService.FindWaitingOrdersByClientId(clientId);
                 if (waitingOrders.Count == 0)
                 {
-                    return ResponseEntity.OK("No Waiting");
+                    return ResponseEntity.OK("No Waiting").Body("");
                 } else
                 {
                     if (waitingOrders.Count > 1)

@@ -38,6 +38,7 @@ namespace ExternalInterfaces
             var response = client.SendSms(request);
             if (response.Body.Code == "OK")
             {
+                MemoryCache.Set(userphone, code, new TimeSpan(0, 0, 100));
                 return response.Body.Message;
             } else
             {
@@ -53,6 +54,16 @@ namespace ExternalInterfaces
                 AccessKeySecret = Configuration["smsAccessKeySecret"]
             };
             return new AlibabaCloud.SDK.Dysmsapi20170525.Client(conf);
+        }
+
+        public static bool JudgeSmsCode(string userphone, string userCode)
+        {
+            string realCode = "";
+            if (MemoryCache.TryGetValue(userphone, out realCode))
+            {
+                return userCode == realCode;
+            }
+            return false;
         }
     }
 }

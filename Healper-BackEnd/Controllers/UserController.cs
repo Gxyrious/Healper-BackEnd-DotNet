@@ -124,9 +124,9 @@ namespace Healper_BackEnd.Controllers
                     return ResponseEntity.ERR("Phone Already Exists");
                 } else
                 {
-                    if (true) // 检测验证码是否正确
+                    if (SMSHelp.JudgeSmsCode(userphone, inDto.code)) // 检测验证码是否正确
                     {
-                        Client newClient = myUserService.AddClientInfo(inDto.nickname, inDto.password, inDto.userPhone, inDto.sex, inDto.age);
+                        Client newClient = myUserService.AddClientInfo(inDto.nickname, GetEncrytionPassword(inDto.password), inDto.userPhone, inDto.sex, inDto.age);
                         return ResponseEntity.OK().Body(newClient.Id);
                     } else
                     {
